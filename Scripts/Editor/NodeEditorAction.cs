@@ -371,9 +371,14 @@ namespace XNodeEditor {
             }
         }
 
-        /// <summary> Puts all selected nodes in focus. If no nodes are present, resets view and zoom to to origin </summary>
+        /// <summary> Puts all selected nodes in focus. If no nodes are present, resets view and zoom to center of graph </summary>
         public void Home() {
             var nodes = Selection.objects.Where(o => o is XNode.Node).Cast<XNode.Node>().ToList();
+            if (nodes.Count == 0)
+            {
+                nodes = graph.nodes;
+            }
+
             if (nodes.Count > 0) {
                 Vector2 minPos = nodes.Select(x => x.position).Aggregate((x, y) => new Vector2(Mathf.Min(x.x, y.x), Mathf.Min(x.y, y.y)));
                 Vector2 maxPos = nodes.Select(x => x.position + (nodeSizes.ContainsKey(x) ? nodeSizes[x] : Vector2.zero)).Aggregate((x, y) => new Vector2(Mathf.Max(x.x, y.x), Mathf.Max(x.y, y.y)));
